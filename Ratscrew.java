@@ -27,8 +27,10 @@ public class Ratscrew
         this.players = players;
         deck = new Deck(RANKS, SUITS, POINT_VALUES);
         playerPiles = new ArrayList<List<Card>>();
-        newGame(players);
-        dealing = false;
+        for (int i=0; i < players; i++){
+            playerPiles.add(new ArrayList<Card>());
+        }
+        newGame();
     }
     
     public void switchTurn(){
@@ -37,10 +39,12 @@ public class Ratscrew
         if (!dealing && playerPiles.get(currentPlayer).size()==0) switchTurn();
     }
     
-    public void newGame(int players){
+    public void newGame(){
+        dealing = true;
         deck.shuffle();
-        for (int i=0; i < players; i++){
-            playerPiles.add(new ArrayList<Card>());
+        currentPlayer = 0;
+        for (List<Card> pile : playerPiles){
+            pile.clear();
         }
         for (int i=0; i < deck.getDeckSize(); i++){
             playerPiles.get(currentPlayer).add(deck.deal());
@@ -48,6 +52,7 @@ public class Ratscrew
         }
         currentPlayer = 0;
         cardPile = new ArrayList<Card>();
+        dealing = false;
     }
     
     private boolean pair(){
@@ -144,6 +149,8 @@ public class Ratscrew
     }
     
     public int getNumToDraw() { return numberToDraw;}    
+    public int getCurrentPlayer(){ return currentPlayer;}
+    public int getFaceCardPlayer(){return faceCardPlayer;}
     public List<Card> getCardPile(){
         return cardPile;
     }
