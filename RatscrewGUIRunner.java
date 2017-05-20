@@ -9,8 +9,7 @@ public class RatscrewGUIRunner {
 	 * @param args is not used.
 	 */
 	public static void main(String[] args) {
-		Ratscrew game = new Ratscrew(2);
-		RatscrewGUI gui = new RatscrewGUI(game);
+		RatscrewGUI gui = new RatscrewGUI();
 		gui.displayGame();
 	}
 }
