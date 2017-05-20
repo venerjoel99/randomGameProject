@@ -22,7 +22,10 @@ public class RatscrewSim
             }
             gui.repaint();
             if (game.pair() || game.sandwich()){
-                int claimer = (int) (Math.random()*game.getPlayers());
+                int claimer;
+                do{
+                     claimer = (int) (Math.random()*game.getPlayers());
+                }while (game.getPlayerPile(claimer).size()==0);
                 game.claim(claimer);
             }
             else if (game.claimable()){

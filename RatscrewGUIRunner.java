@@ -5,12 +5,12 @@
  */
 public class RatscrewGUIRunner {
 
-	/**
-	 * Plays the GUI version of Elevens.
-	 * @param args is not used.
-	 */
-	public static void main(String[] args) {
-		RatscrewGUI gui = new RatscrewGUI(5);
-		gui.displayGame();
-	}
+    /**
+     * Plays the GUI version of Elevens.
+     * @param args is not used.
+     */
+    public static void main(String[] args) {
+        RatscrewGUI gui = new RatscrewGUI(5);
+        gui.displayGame();
+    }
 }

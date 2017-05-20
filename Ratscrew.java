@@ -108,19 +108,19 @@ public class Ratscrew
     
     public boolean gameOver(){
         if (!pair() && !sandwich() && !claimable()){
-            for (List<Card> player : playerPiles){
-              if (player.size()==deck.getDeckSize()) return true;
-            }
+            if (gameWinner()!=-1) return true;
             if (cardPile.size()==deck.getDeckSize()) return true;
         }
         return false;
     }
     
     public int gameWinner(){
-        if (gameOver()){
-            for (int i = 0; i < playerPiles.size(); i++){
-                if (playerPiles.get(i).size()==deck.size()) return i;
+        for (int i = 0; i < players; i++){
+            int cards = 0;
+            for (int j=0; j< players; j++){
+                 if (i!=j) cards+=playerPiles.get(j).size();
             }
+            if (cards==0) return i+1;
         }
         return -1;       
     }
@@ -152,6 +152,7 @@ public class Ratscrew
     public int getCurrentPlayer(){ return currentPlayer;}
     public int getFaceCardPlayer(){return faceCardPlayer;}
     public int getPlayers(){return players;}
+    public List<Card> getPlayerPile(int player) {return playerPiles.get(player);}
     public List<Card> getCardPile(){
         return cardPile;
     }
