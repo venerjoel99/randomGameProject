@@ -1,4 +1,5 @@
 /**
+ * A simple commit testing comment
  * This is a class that plays the GUI version of the Elevens game.
  * See accompanying documents for a description of how Elevens is played.
  */
