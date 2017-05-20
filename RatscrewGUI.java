@@ -67,9 +67,9 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
      * Initialize the GUI.
      * @param gameBoard is a <code>Board</code> subclass.
      */
-    public RatscrewGUI() {
-        game = new Ratscrew(5);
-        playerCards = new JLabel[5];
+    public RatscrewGUI(int players) {
+        game = new Ratscrew(players);
+        playerCards = new JLabel[players];
         initDisplay();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
@@ -137,7 +137,7 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
         newGame = new JButton();
         newGame.setBounds(pileLeft, pileTop - 70, 100, 30);
         newGame.addActionListener(this);
-	newGame.setText("New Game");
+        newGame.setText("New Game");
         newGame.setFocusable(false);
         panel.add(newGame);
         newGame.setVisible(true);
@@ -328,4 +328,5 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
     }
     public void keyReleased(KeyEvent e){
     }
+    public Ratscrew getGame(){ return game;}
 }

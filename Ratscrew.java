@@ -55,7 +55,7 @@ public class Ratscrew
         dealing = false;
     }
     
-    private boolean pair(){
+    public boolean pair(){
         if (cardPile.size() > 1 && 
             cardPile.get(cardPile.size()-1).rank()
             .equals(cardPile.get(cardPile.size()-2).rank()))
@@ -63,7 +63,7 @@ public class Ratscrew
         return false;
     }
     
-    private boolean sandwich(){
+    public boolean sandwich(){
         if (cardPile.size() > 2 &&
             cardPile.get(cardPile.size()-1).rank()
             .equals(cardPile.get(cardPile.size()-3).rank()))
@@ -128,7 +128,7 @@ public class Ratscrew
     public boolean draw(int currentDrawer){    
         if (!gameOver() && currentPlayer==currentDrawer && !claimable()){
             int size = playerPiles.get(currentPlayer).size();
-            cardPile.add(playerPiles.get(currentPlayer).remove(size-1));
+            if (size>0) cardPile.add(playerPiles.get(currentPlayer).remove(size-1));
             if (faceCard()) {
                 numberToDraw = cardPile.get(cardPile.size()-1).pointValue();
                 faceCardPlayer = currentPlayer;
@@ -151,6 +151,7 @@ public class Ratscrew
     public int getNumToDraw() { return numberToDraw;}    
     public int getCurrentPlayer(){ return currentPlayer;}
     public int getFaceCardPlayer(){return faceCardPlayer;}
+    public int getPlayers(){return players;}
     public List<Card> getCardPile(){
         return cardPile;
     }
