@@ -4,13 +4,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.net.URL;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
+public class RatscrewGUI extends JFrame implements KeyListener
 {
     private static final int DEFAULT_HEIGHT = 500;
     private static final int DEFAULT_WIDTH = 800;
@@ -55,8 +52,6 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
 
     /** The main panel containing the game components. */
     private JPanel panel;
-    /** Buttons in the game*/
-    private JButton newGame;
     /** Game Labels*/
     private JLabel playerCards[];
     private JLabel previousCards[] = new JLabel[3];
@@ -133,14 +128,6 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
         previousCards[0].setBounds(pileLeft + (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
         previousCards[1].setBounds(pileLeft, pileTop, CARD_WIDTH, CARD_HEIGHT);
         previousCards[2].setBounds(pileLeft - (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
-        
-        newGame = new JButton();
-        newGame.setBounds(pileLeft, pileTop - 70, 100, 30);
-        newGame.addActionListener(this);
-        newGame.setText("New Game");
-        newGame.setFocusable(false);
-        panel.add(newGame);
-        newGame.setVisible(true);
 
         statusMsg = new JLabel();
         statusMsg.setBounds(pileLeft, pileTop - 40, 100, 30);
@@ -218,18 +205,6 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
                 setVisible(true);
             }
         });
-    }
-    
-    /**
-     * Respond to a button click (on either the "Replace" button
-     * or the "Restart" button).
-     * @param e the button click action event
-     */
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(newGame)){
-            game.newGame();
-            repaint();
-        }
     }
     
     public void keyPressed(KeyEvent e){

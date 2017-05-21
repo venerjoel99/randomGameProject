@@ -2,3 +2,8 @@ Card.ctxt
 *.class
 *.ctxt
 *.bluej
+*.html
+*.gif
+*.css
+doc/package-list
+doc/logfile.txt
