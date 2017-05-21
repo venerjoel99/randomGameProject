@@ -192,6 +192,10 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
             winMsg.setVisible(true);
         }
         else winMsg.setVisible(false);
+        if (game.gameOver()){
+            winMsg.setText("Player " + game.gameWinner() + " wins");
+            winMsg.setVisible(true);
+        }
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         panel.repaint();
@@ -297,30 +301,13 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
             else statusMsg.setVisible(false);
             //repaint();
         }
-        else if (e.getKeyChar()=='l'){
-            if (!game.draw(4)){
-                statusMsg.setText((game.getCurrentPlayer() + 1) + " draws");
-                statusMsg.setVisible(true);
-            }
-            else statusMsg.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()==';'){
-            if (!game.claim(4)){
-                if (game.claimable()) statusMsg.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else statusMsg.setText("illegal");
-                statusMsg.setVisible(true);
-            }
-            else statusMsg.setVisible(false);
-            //repaint();
+        else if (e.getKeyChar()=='r'){
+            game.newGame();
+            repaint();
         }
         else {
             signalError();
             return;
-        }
-        if (game.gameOver()){
-            winMsg.setText("Player " + (game.gameWinner()+1) + " wins");
-            winMsg.setVisible(true);
         }
         repaint();
     }
@@ -329,4 +316,5 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
     public void keyReleased(KeyEvent e){
     }
     public Ratscrew getGame(){ return game;}
+    public JLabel getWinMsg(){ return winMsg;}
 }
