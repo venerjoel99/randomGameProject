@@ -119,7 +119,7 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
             
-        for (int j = 0; j < previousCards.length; j++){
+        for (int j = 0; j < previousCards.length ; j++){
             previousCards[j] = new JLabel();
             panel.add(previousCards[j]);
         }
@@ -130,9 +130,9 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
             playerCards[i].setBounds(player1Left + (i * 100), player1Top, CARD_WIDTH, CARD_HEIGHT);
         }
         
-        previousCards[0].setBounds(pileLeft - CARD_WIDTH, pileTop, CARD_WIDTH, CARD_HEIGHT);
+        previousCards[0].setBounds(pileLeft + (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
         previousCards[1].setBounds(pileLeft, pileTop, CARD_WIDTH, CARD_HEIGHT);
-        previousCards[2].setBounds(pileLeft + CARD_WIDTH, pileTop, CARD_WIDTH, CARD_HEIGHT);
+        previousCards[2].setBounds(pileLeft - (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
         
         newGame = new JButton();
         newGame.setBounds(pileLeft, pileTop - 70, 100, 30);
@@ -178,7 +178,7 @@ public class RatscrewGUI extends JFrame implements ActionListener, KeyListener
            if (imageURL !=null){
             ImageIcon icon = new ImageIcon(imageURL);
             previousCards[i].setIcon(icon);
-            previousCards[i].setVisible(true);
+            previousCards[i].setVisible(cardImageFileName!=imageFileName(null));
            }else {
                 throw new RuntimeException(
                     "Card image not found: \"" + cardImageFileName + "\"");
