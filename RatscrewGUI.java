@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import java.awt.GridLayout;
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
@@ -49,14 +50,12 @@ public class RatscrewGUI extends JFrame implements KeyListener
 
     /** The board (Board subclass). */
     private Ratscrew game;
+    
+    private JLabel win;
+    private JLabel status;
 
     /** The main panel containing the game components. */
-    private JPanel panel;
-    /** Game Labels*/
-    private JLabel playerCards[];
-    private JLabel previousCards[] = new JLabel[3];
-    private JLabel winMsg;
-    private JLabel statusMsg;
+    private CardPanel panel;
 
     /**
      * Initialize the GUI.
@@ -64,83 +63,23 @@ public class RatscrewGUI extends JFrame implements KeyListener
      */
     public RatscrewGUI(int players) {
         game = new Ratscrew(players);
-        playerCards = new JLabel[players];
         initDisplay();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
     }
-    
-    /**
-     * Returns the image that corresponds to the input card.
-     * Image names have the format "[Rank][Suit].GIF" or "[Rank][Suit]S.GIF",
-     * for example "aceclubs.GIF" or "8heartsS.GIF". The "S" indicates that
-     * the card is selected.
-     *
-     * @param c Card to get the image for
-     * @param isSelected flag that indicates if the card is selected
-     * @return String representation of the image
-     */
-    private String imageFileName(Card c, boolean isSelected) {
-        String str = "cards/";
-        if (c == null) {
-            return "cards/back1.GIF";
-        }
-        str += c.rank() + c.suit();
-        if (isSelected) {
-            str += "S";
-        }
-        str += ".GIF";
-        return str;
-    }
-    
-    private String imageFileName(Card c){
-        return imageFileName(c, false);
-    }
-    
     /**
      * Initialize the display.
      */
     private void initDisplay()  {
-        panel = new JPanel() {
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-            }
-        };
+        panel = new CardPanel(this);
 
         this.setTitle("Egyptian Ratscrew");
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         
-        panel.setLayout(null);
+        panel.setLayout(new GridLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
-            
-        for (int j = 0; j < previousCards.length ; j++){
-            previousCards[j] = new JLabel();
-            panel.add(previousCards[j]);
-        }
-        for (int i = 0; i < playerCards.length; i++){
-            playerCards[i] = new JLabel();
-            playerCards[i].setFont(new Font("SansSerif", Font.BOLD, 10));
-            panel.add(playerCards[i]);
-            playerCards[i].setBounds(player1Left + (i * 100), player1Top, CARD_WIDTH, CARD_HEIGHT);
-        }
-        
-        previousCards[0].setBounds(pileLeft + (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
-        previousCards[1].setBounds(pileLeft, pileTop, CARD_WIDTH, CARD_HEIGHT);
-        previousCards[2].setBounds(pileLeft - (CARD_WIDTH/2), pileTop, CARD_WIDTH, CARD_HEIGHT);
-
-        statusMsg = new JLabel();
-        statusMsg.setBounds(pileLeft, pileTop - 40, 100, 30);
-        panel.add(statusMsg);
-        statusMsg.setVisible(false);
-
-        winMsg = new JLabel();
-        winMsg.setBounds(pileLeft, pileTop + 120, 100, 30);
-        winMsg.setFont(new Font("SansSerif", Font.BOLD, 10));
-        winMsg.setForeground(Color.GREEN);
-        panel.add(winMsg);
-        winMsg.setVisible(false);
-
+        panel.initPanel();
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         getContentPane().add(panel);
@@ -149,39 +88,17 @@ public class RatscrewGUI extends JFrame implements KeyListener
         panel.requestFocusInWindow();
         //getRootPane().setDefaultButton(replaceButton);
         panel.setVisible(true);
+        win = panel.getWinMsg();
+        status = panel.getStatus();
     }
     
     /**
      * Draw the display (cards and messages).
      */
     public void repaint() {
-        String cardImageFileName;
-        for (int i = 0; i < previousCards.length; i++){
-           if (game.getCardPile().size()>i){
-                cardImageFileName = imageFileName(game.getCardPile().get(game.getCardPile().size()-(1+i)));
-           }
-           else cardImageFileName = imageFileName(null);
-           URL imageURL = getClass().getResource(cardImageFileName);
-           if (imageURL !=null){
-            ImageIcon icon = new ImageIcon(imageURL);
-            previousCards[i].setIcon(icon);
-            previousCards[i].setVisible(cardImageFileName!=imageFileName(null));
-           }else {
-                throw new RuntimeException(
-                    "Card image not found: \"" + cardImageFileName + "\"");
-           }
-        }
-        for (int i = 0; i < playerCards.length; i++){
-            playerCards[i].setText(game.deckSize(i) + "cards");
-        }
-        if (game.claimable()){
-            winMsg.setText("claim");
-            winMsg.setVisible(true);
-        }
-        else winMsg.setVisible(false);
         if (game.gameOver()){
-            winMsg.setText("Player " + game.gameWinner() + " wins");
-            winMsg.setVisible(true);
+            win.setText("Player " + game.gameWinner() + " wins");
+            win.setVisible(true);
         }
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
@@ -210,75 +127,74 @@ public class RatscrewGUI extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e){
         if (e.getKeyChar()=='a'){
             if (!game.draw(0)){
-                statusMsg.setText((game.getCurrentPlayer() + 1) + " draws");
-                statusMsg.setVisible(true);
+                status.setText((game.getCurrentPlayer() + 1) + " draws");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else status.setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='s'){
             if (!game.claim(0)){
-                if (game.claimable()) statusMsg.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else statusMsg.setText("illegal");
-                statusMsg.setVisible(true);
+                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
+                else status.setText("illegal");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else status.setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='d'){
             if (!game.draw(1)){
-                statusMsg.setText((game.getCurrentPlayer() + 1) + " draws");
-                statusMsg.setVisible(true);
+                status.setText((game.getCurrentPlayer() + 1) + " draws");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else status.setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='f'){
             if (!game.claim(1)){
-                if (game.claimable()) statusMsg.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else statusMsg.setText("illegal");
-                statusMsg.setVisible(true);
+                if (game.claimable()) panel.getStatus().setText((game.getFaceCardPlayer() + 1) + " claims");
+                else panel.getStatus().setText("illegal");
+                panel.getStatus().setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else panel.getStatus().setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='g'){
             if (!game.draw(2)){
-                statusMsg.setText((game.getCurrentPlayer() + 1) + " draws");
-                statusMsg.setVisible(true);
+                status.setText((game.getCurrentPlayer() + 1) + " draws");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else panel.getStatus().setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='h'){
             if (!game.claim(2)){
-                if (game.claimable()) statusMsg.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else statusMsg.setText("illegal");
-                statusMsg.setVisible(true);
+                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
+                else status.setText("illegal");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else panel.getStatus().setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='j'){
             if (!game.draw(3)){
-                statusMsg.setText((game.getCurrentPlayer() + 1) + " draws");
-                statusMsg.setVisible(true);
+                panel.getStatus().setText((game.getCurrentPlayer() + 1) + " draws");
+                panel.getStatus().setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else status.setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='k'){
             if (!game.claim(3)){
-                if (game.claimable()) statusMsg.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else statusMsg.setText("illegal");
-                statusMsg.setVisible(true);
+                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
+                else status.setText("illegal");
+                status.setVisible(true);
             }
-            else statusMsg.setVisible(false);
+            else status.setVisible(false);
             //repaint();
         }
         else if (e.getKeyChar()=='r'){
             game.newGame();
-            repaint();
         }
         else {
             signalError();
@@ -291,5 +207,4 @@ public class RatscrewGUI extends JFrame implements KeyListener
     public void keyReleased(KeyEvent e){
     }
     public Ratscrew getGame(){ return game;}
-    public JLabel getWinMsg(){ return winMsg;}
 }
