@@ -79,9 +79,9 @@ public class CardPanel extends JPanel{
             default:
                 if (players>0){
                     for (int i = 0; i < players; i++){
-                        playerCards[i].setBounds(getWidth()/2 - 300 + (i * 100), getHeight() / 2 + 100, 
+                        playerCards[i].setBounds(getWidth()/2 - 300 + (i * 100), getHeight() / 2 + CARD_HEIGHT/2, 
                         CARD_WIDTH, CARD_HEIGHT); 
-                        playerData[i].setBounds(getWidth()/2 -300 + (i * 100), getHeight() / 2 + 100 + CARD_HEIGHT,
+                        playerData[i].setBounds(getWidth()/2 -300 + (i * 100), getHeight() / 2 +  3 * CARD_HEIGHT / 2,
                         CARD_WIDTH, CARD_HEIGHT/3);
                     }
                 }
