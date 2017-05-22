@@ -91,7 +91,7 @@ public class CardPanel extends JPanel{
            playerData[i].setText("P" + (i+1) + ": " + game.deckSize(i) + " cards");
            playerCards[i].setIcon(new ImageIcon(getClass().getResource(imageFileName(null))));
            playerData[i].setVisible(true);
-           playerCards[i].setVisible(game.deckSize(i)>0);
+           playerCards[i].setVisible(game.deckSize(i)>0 && game.getCurrentPlayer()==i);
         }
         statusMsg.setBounds(getWidth()/2, getHeight()/2 - CARD_HEIGHT/2 - 30, 100, 30);
         winMsg.setBounds(getWidth()/2, getHeight()/2 + CARD_HEIGHT/2 + 30, 100, 30);

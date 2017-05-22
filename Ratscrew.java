@@ -128,14 +128,17 @@ public class Ratscrew
     public boolean draw(int currentDrawer){    
         if (!gameOver() && currentPlayer==currentDrawer && !claimable()){
             int size = playerPiles.get(currentPlayer).size();
-            if (size>0) cardPile.add(playerPiles.get(currentPlayer).remove(size-1));
-            if (faceCard()) {
-                numberToDraw = cardPile.get(cardPile.size()-1).pointValue();
-                faceCardPlayer = currentPlayer;
-                switchTurn();
+            if (size>0){
+                cardPile.add(playerPiles.get(currentPlayer).remove(size-1));
+                if (faceCard()) {
+                    numberToDraw = cardPile.get(cardPile.size()-1).pointValue();
+                    faceCardPlayer = currentPlayer;
+                    switchTurn();
+                }
+                else if (numberToDraw>0) numberToDraw--;
+                else if (numberToDraw==0 && !claimable()) switchTurn();
             }
-            else if (numberToDraw>0) numberToDraw--;
-            else if (numberToDraw==0 && !claimable()) switchTurn();
+            else switchTurn();
             return true;
         }
         return false;
