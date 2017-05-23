@@ -14,6 +14,8 @@ import java.awt.GridLayout;
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * Write a description of class RatscrewGUI here.
@@ -21,7 +23,7 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class RatscrewGUI extends JFrame implements KeyListener
+public class RatscrewGUI extends JFrame implements KeyListener, ActionListener
 {
     private static final int DEFAULT_HEIGHT = 500;
     private static final int DEFAULT_WIDTH = 800;
@@ -125,80 +127,61 @@ public class RatscrewGUI extends JFrame implements KeyListener
     }
     
     public void keyPressed(KeyEvent e){
-        if (e.getKeyChar()=='a'){
-            if (!game.draw(0)){
-                status.setText((game.getCurrentPlayer() + 1) + " draws");
-                status.setVisible(true);
-            }
-            else status.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='s'){
-            if (!game.claim(0)){
-                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else status.setText("illegal");
-                status.setVisible(true);
-            }
-            else status.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='d'){
-            if (!game.draw(1)){
-                status.setText((game.getCurrentPlayer() + 1) + " draws");
-                status.setVisible(true);
-            }
-            else status.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='f'){
-            if (!game.claim(1)){
-                if (game.claimable()) panel.getStatus().setText((game.getFaceCardPlayer() + 1) + " claims");
-                else panel.getStatus().setText("illegal");
-                panel.getStatus().setVisible(true);
-            }
-            else panel.getStatus().setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='g'){
-            if (!game.draw(2)){
-                status.setText((game.getCurrentPlayer() + 1) + " draws");
-                status.setVisible(true);
-            }
-            else panel.getStatus().setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='h'){
-            if (!game.claim(2)){
-                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else status.setText("illegal");
-                status.setVisible(true);
-            }
-            else panel.getStatus().setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='j'){
-            if (!game.draw(3)){
-                panel.getStatus().setText((game.getCurrentPlayer() + 1) + " draws");
-                panel.getStatus().setVisible(true);
-            }
-            else status.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='k'){
-            if (!game.claim(3)){
-                if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
-                else status.setText("illegal");
-                status.setVisible(true);
-            }
-            else status.setVisible(false);
-            //repaint();
-        }
-        else if (e.getKeyChar()=='r'){
+        char key = e.getKeyChar();
+        if (key=='r'){
             game.newGame();
-        }
-        else {
-            signalError();
+            repaint();
             return;
+        }
+        if (game.getPlayers()!=2){            
+            switch (key){
+                case 'a':
+                    draw(0);
+                    break;
+                case 's':
+                    claim(0);
+                    break;
+                case 'd':
+                    draw(1);
+                    break;
+                case 'f':
+                    claim(1);
+                    break;
+                case 'g':
+                    draw(2);
+                    break;
+                case 'h':
+                    claim(2);
+                    break;
+                case 'j':
+                    draw(3);
+                    break;
+                case 'k':
+                    claim(3);
+                    break;
+                default:
+                    signalError();
+                    return;
+            }
+        }
+        else{
+            switch(key){
+                case 'f':
+                    draw(0);
+                    break;
+                case 'd':
+                    claim(0);
+                    break;
+                case 'j':
+                    draw(1);
+                    break;
+                case 'k':
+                    claim(1);
+                    break;
+                default:
+                    signalError();
+                    return;
+            }
         }
         repaint();
     }
@@ -206,5 +189,23 @@ public class RatscrewGUI extends JFrame implements KeyListener
     }
     public void keyReleased(KeyEvent e){
     }
+    public void actionPerformed(ActionEvent e){
+    }
     public Ratscrew getGame(){ return game;}
+    protected void draw(int player){
+        if (!game.draw(player)){
+            status.setText((game.getCurrentPlayer() + 1) + " draws");
+              status.setVisible(true);
+        }
+        else status.setVisible(false);
+    }
+    protected void claim(int player){
+        if (!game.claim(player)){
+            if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
+            else status.setText("illegal");
+            status.setVisible(true);
+        }
+        else status.setVisible(false);
+    }
+    public CardPanel getPanel(){ return panel;}
 }

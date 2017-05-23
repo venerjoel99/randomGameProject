@@ -147,4 +147,17 @@ public class CardPanel extends JPanel{
     }
     public JLabel getStatus(){ return statusMsg;}
     public JLabel getWinMsg(){ return winMsg;}
+    public JLabel getPlayerCards(int index){
+        if (index < playerCards.length) return playerCards[index];
+        return null;
+    }
+    public JLabel getPlayerData(int index){
+        if (index < playerCards.length) return playerData[index];
+        return null;
+    }
+    public JLabel getPreviousCard(int index){
+        if (index < previousCards.length) return previousCards[index];
+        return null;
+    }
+    public int cardPileSize(){return previousCards.length;}
 }

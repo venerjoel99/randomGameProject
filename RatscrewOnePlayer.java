@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class RatscrewSim here.
  * 
@@ -11,47 +10,46 @@ public class RatscrewOnePlayer
     public static void main(String[] args){
         boolean currentlyPlaying = true;
         boolean playing = true;
-        RatscrewGUI gui = new RatscrewGUI(4);
+        OnePlayerGUI gui = new OnePlayerGUI(4);
         Ratscrew game = gui.getGame();
         gui.displayGame();
+        
         while (playing){
             while (!game.gameOver()){
                 if (game.getCurrentPlayer()!=0) game.draw(game.getCurrentPlayer());
-                else while (game.getCurrentPlayer()==0);
+                autoClaim(game, gui);
                 gui.repaint();
-                if (game.pair() || game.sandwich()){
-                    try{
-                        Thread.sleep(waitTime);
-                    }
-                    catch(Exception e){
-                        System.out.println(e.toString());
-                    }
-                    if (game.pair() || game.sandwich()){
-                        int claimer; 
-                        do{
-                            claimer = (int) (Math.random()*game.getPlayers());
-                        }while (game.getPlayerPile(claimer).size()==0 && claimer==0);
-                        game.claim(claimer);
-                    }
-                    gui.repaint();
-                }
-                else if (game.claimable() && game.getFaceCardPlayer()!=0){
-                    try{
-                        Thread.sleep(waitTime);
-                    }
-                    catch(Exception e){
-                        System.out.println(e.toString());
-                    }
-                    game.claim(game.getFaceCardPlayer());
-                    gui.repaint();
-                }
-                try{
-                    Thread.sleep(waitTime);
-                }
-                catch(Exception e){
-                    System.out.println(e.toString());
-                }
+                sleep(waitTime);
             }
+        }
+        
+    }
+    public static void autoClaim(Ratscrew game, OnePlayerGUI gui){
+        if (game.pair() || game.sandwich()){
+            sleep(waitTime);
+            if (game.pair() || game.sandwich()){
+                int claimer=0; 
+                do{
+                    claimer = (int) (Math.random()*game.getPlayers());
+                }while (game.getPlayerPile(claimer).size()==0 && claimer==0);
+                game.claim(claimer);                
+                System.out.println("Claimed by:" + claimer);
+                
+            }                                 
+            gui.repaint();
+        }
+        else if (game.claimable() && game.getFaceCardPlayer()!=0){
+                sleep(waitTime);
+                game.claim(game.getFaceCardPlayer());
+                System.out.println("Claimed by:" + game.getFaceCardPlayer());
+        }  
+    }
+    public static void sleep(int waitTime){
+        try{
+            Thread.sleep(waitTime);
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
         }
     }
 }
