@@ -11,7 +11,7 @@ public class Ratscrew
     private List<Card> cardPile;
     private List<List<Card>> playerPiles;
     private Deck deck;
-    private boolean dealing = true;
+    private boolean dealing = true; 
     private int players = 0;
     private int currentPlayer = 0;
     private int faceCardPlayer = -1;
@@ -56,18 +56,20 @@ public class Ratscrew
     }
     
     public boolean pair(){
-        if (cardPile.size() > 1 && 
-            cardPile.get(cardPile.size()-1).rank()
-            .equals(cardPile.get(cardPile.size()-2).rank()))
-         return true;
+        if (cardPile.size() > 1 && cardPile.get(cardPile.size()-1)!=null
+            && cardPile.get(cardPile.size()-2)!=null){
+            return cardPile.get(cardPile.size()-1).rank()
+            .equals(cardPile.get(cardPile.size()-2).rank());
+        }
         return false;
     }
     
     public boolean sandwich(){
-        if (cardPile.size() > 2 &&
-            cardPile.get(cardPile.size()-1).rank()
-            .equals(cardPile.get(cardPile.size()-3).rank()))
-         return true;
+        if (cardPile.size() > 2 && cardPile.get(cardPile.size()-1)!=null
+            && cardPile.get(cardPile.size()-3)!=null){
+            return cardPile.get(cardPile.size()-1).rank()
+            .equals(cardPile.get(cardPile.size()-3).rank());
+        }
         return false;
     }
     
@@ -93,17 +95,14 @@ public class Ratscrew
             return true;
         }
         else {
+            if (playerPiles.get(currentClaimer).size()>0)
             cardPile.add(0, playerPiles.get(currentClaimer).remove(0));
             return false;
         }
     }
     
     public boolean claimable(){
-        if (faceCardPlayer!=-1 && numberToDraw==0){
-            int num = currentPlayer - faceCardPlayer;
-            if (num == 1 || Math.abs(num)==players-1) return true;
-        }
-        return false;
+        return (faceCardPlayer!=-1 && numberToDraw==0);
     }
     
     public boolean gameOver(){

@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.net.URL;
-
 public class CardPanel extends JPanel{
     private static final int CARD_WIDTH = 73;
     private static final int CARD_HEIGHT = 97;
@@ -23,7 +22,7 @@ public class CardPanel extends JPanel{
     private int y = 0;
     public CardPanel(RatscrewGUI frame){
         this.frame = frame;
-        this.game = this.frame.getGame();
+       // this.game = this.frame.getGame();
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);

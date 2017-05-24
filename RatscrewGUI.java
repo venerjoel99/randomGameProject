@@ -23,41 +23,18 @@ import java.awt.event.ActionEvent;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class RatscrewGUI extends JFrame implements KeyListener, ActionListener
+public abstract class RatscrewGUI extends JFrame
 {
-    private static final int DEFAULT_HEIGHT = 500;
-    private static final int DEFAULT_WIDTH = 800;
-    private static final int CARD_WIDTH = 73;
-    private static final int CARD_HEIGHT = 97;
-    //Layout of the pile
-    private static final int pileTop = 100;
-    private static final int pileLeft = 350;
-    //Layout of the two player piles
-    private static final int player1Top = 160;
-    private static final int player1Left = 250;
-    private static final int player2Top = 160;
-    private static final int player2Left = 450;
-    private static final int BUTTON_TOP = 30;
-    /** x coord of the "Replace" button. */
-    private static final int BUTTON_LEFT = 570;
-    /** Distance between the tops of the "Replace" and "Restart" buttons. */
-    private static final int BUTTON_HEIGHT_INC = 50;
-    /** y coord of the "n undealt cards remain" label. */
-    private static final int LABEL_TOP = 160;
-    /** x coord of the "n undealt cards remain" label. */
-    private static final int LABEL_LEFT = 540;
-    /** Distance between the tops of the "n undealt cards" and
-     *  the "You lose/win" labels. */
-    private static final int LABEL_HEIGHT_INC = 35;
+    protected static final int DEFAULT_HEIGHT = 500;
+    protected static final int DEFAULT_WIDTH = 800;
+    protected static final int CARD_WIDTH = 73;
+    protected static final int CARD_HEIGHT = 97;    
 
     /** The board (Board subclass). */
-    private Ratscrew game;
-    
-    private JLabel win;
-    private JLabel status;
+    protected Ratscrew game;
 
     /** The main panel containing the game components. */
-    private CardPanel panel;
+    protected CardPanel panel;
 
     /**
      * Initialize the GUI.
@@ -65,15 +42,15 @@ public class RatscrewGUI extends JFrame implements KeyListener, ActionListener
      */
     public RatscrewGUI(int players) {
         game = new Ratscrew(players);
-        initDisplay();
+        //initDisplay();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        repaint();
+        //repaint();
     }
     /**
      * Initialize the display.
      */
-    private void initDisplay()  {
-        panel = new CardPanel(this);
+    protected void initDisplay()  {
+        //panel = new CardPanel(this);
 
         this.setTitle("Egyptian Ratscrew");
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
@@ -85,36 +62,33 @@ public class RatscrewGUI extends JFrame implements KeyListener, ActionListener
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         getContentPane().add(panel);
-        panel.addKeyListener(this);
+        //panel.addKeyListener(this);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         //getRootPane().setDefaultButton(replaceButton);
         panel.setVisible(true);
-        win = panel.getWinMsg();
-        status = panel.getStatus();
-    }
-    
+        //win = panel.getWinMsg();
+        //status = panel.getStatus();
+    }    
     /**
      * Draw the display (cards and messages).
      */
     public void repaint() {
         if (game.gameOver()){
-            win.setText("Player " + game.gameWinner() + " wins");
-            win.setVisible(true);
+            panel.getWinMsg().setText("Player " + game.gameWinner() + " wins");
+            panel.getWinMsg().setVisible(true);
         }
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         panel.repaint();
-    }
-    
+    }    
     /**
      * Deal with the user clicking on something other than a button or a card.
      */
-    private void signalError() {
+    protected void signalError() {
         Toolkit t = panel.getToolkit();
         t.beep();
-    }
-    
+    }  
     /**
      * Run the game.
      */
@@ -124,88 +98,128 @@ public class RatscrewGUI extends JFrame implements KeyListener, ActionListener
                 setVisible(true);
             }
         });
-    }
-    
-    public void keyPressed(KeyEvent e){
-        char key = e.getKeyChar();
-        if (key=='r'){
-            game.newGame();
-            repaint();
-            return;
-        }
-        if (game.getPlayers()!=2){            
-            switch (key){
-                case 'a':
-                    draw(0);
-                    break;
-                case 's':
-                    claim(0);
-                    break;
-                case 'd':
-                    draw(1);
-                    break;
-                case 'f':
-                    claim(1);
-                    break;
-                case 'g':
-                    draw(2);
-                    break;
-                case 'h':
-                    claim(2);
-                    break;
-                case 'j':
-                    draw(3);
-                    break;
-                case 'k':
-                    claim(3);
-                    break;
-                default:
-                    signalError();
-                    return;
-            }
-        }
-        else{
-            switch(key){
-                case 'f':
-                    draw(0);
-                    break;
-                case 'd':
-                    claim(0);
-                    break;
-                case 'j':
-                    draw(1);
-                    break;
-                case 'k':
-                    claim(1);
-                    break;
-                default:
-                    signalError();
-                    return;
-            }
-        }
-        repaint();
-    }
-    public void keyTyped(KeyEvent e){
-    }
-    public void keyReleased(KeyEvent e){
-    }
-    public void actionPerformed(ActionEvent e){
-    }
-    public Ratscrew getGame(){ return game;}
+    }    
     protected void draw(int player){
         if (!game.draw(player)){
-            status.setText((game.getCurrentPlayer() + 1) + " draws");
-              status.setVisible(true);
+           panel.getStatusMsg().setText((game.getCurrentPlayer() + 1) + " draws");
+           panel.getStatusMsg().setVisible(true);
         }
-        else status.setVisible(false);
+        else panel.getStatusMsg().setVisible(false);
     }
     protected void claim(int player){
         if (!game.claim(player)){
-            if (game.claimable()) status.setText((game.getFaceCardPlayer() + 1) + " claims");
-            else status.setText("illegal");
-            status.setVisible(true);
+            if (game.claimable()) panel.getStatusMsg().setText((game.getFaceCardPlayer() + 1) + " claims");
+            else panel.getStatusMsg().setText("illegal");
+            panel.getStatusMsg().setVisible(true);
         }
-        else status.setVisible(false);
+        else panel.getStatusMsg().setVisible(false);
     }
-    public CardPanel getPanel(){ return panel;}
+    protected abstract class CardPanel extends JPanel{
+        private Ratscrew game;
+        private JLabel[] previousCards;
+        private JLabel[] playerCards;
+        private JLabel[] playerData;
+        private JLabel statusMsg;
+        private JLabel winMsg;
+        protected CardPanel(RatscrewGUI frame){
+            this.game = frame.game;
+        }
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            previousCards[0].setBounds(getWidth()/2 + (CARD_WIDTH/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
+            previousCards[1].setBounds(getWidth()/2, getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
+            previousCards[2].setBounds(getWidth()/2 - (CARD_WIDTH/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
+            for (int i = 0; i < previousCards.length; i++){
+                String cardImageFileName;
+                if (game.getCardPile().size()>i){
+                    cardImageFileName = imageFileName(game.getCardPile().get(game.getCardPile().size()-(1+i)));
+                }
+                else cardImageFileName = imageFileName(null);
+                URL imageURL = getClass().getResource(cardImageFileName);
+                if (imageURL !=null){
+                    ImageIcon icon = new ImageIcon(imageURL);
+                    previousCards[i].setIcon(icon);
+                    previousCards[i].setVisible(cardImageFileName!=imageFileName(null));
+                }else {
+                    throw new RuntimeException(
+                        "Card image not found: \"" + cardImageFileName + "\"");
+                    }
+            }
+            for (int i = 0; i < playerCards.length; i++){
+                playerData[i].setText("P" + (i+1) + ": " + game.deckSize(i) + " cards");
+                playerCards[i].setIcon(new ImageIcon(getClass().getResource(imageFileName(null))));
+                playerData[i].setVisible(true);
+                playerCards[i].setVisible(game.deckSize(i)>0 && game.getCurrentPlayer()==i);
+            }
+            statusMsg.setBounds(getWidth()/2, getHeight()/2 - CARD_HEIGHT/2 - 30, 100, 30);
+            winMsg.setBounds(getWidth()/2, getHeight()/2 + CARD_HEIGHT/2 + 30, 100, 30);
+        }
+        protected void initPanel(){
+            previousCards = new JLabel[3];
+            playerCards = new JLabel[game.getPlayers()];
+            playerData  = new JLabel[game.getPlayers()];
+            for (int j = 0; j < previousCards.length ; j++){
+                previousCards[j] = new JLabel();
+                this.add(previousCards[j]);
+            }
+            for (int i = 0; i < playerCards.length; i++){
+                playerCards[i] = new JLabel();
+                playerData[i] = new JLabel();
+                playerData[i].setFont(new Font("SansSerif", Font.BOLD, 10));
+                this.add(playerCards[i]);
+                this.add(playerData[i]);
+            }
+            statusMsg = new JLabel();
+            winMsg = new JLabel();
+            this.add(statusMsg);
+            statusMsg.setVisible(false);
+            winMsg.setFont(new Font("SansSerif", Font.BOLD, 10));
+            winMsg.setForeground(Color.GREEN);
+            this.add(winMsg);
+            winMsg.setVisible(false);
+        }
+        /**
+           * Returns the image that corresponds to the input card.
+           * Image names have the format "[Rank][Suit].GIF" or "[Rank][Suit]S.GIF",
+           * for example "aceclubs.GIF" or "8heartsS.GIF". The "S" indicates that
+           * the card is selected.
+           *
+           * @param c Card to get the image for
+           * @param isSelected flag that indicates if the card is selected
+           * @return String representation of the image
+        */
+        private String imageFileName(Card c, boolean isSelected) {
+            String str = "cards/";
+            if (c == null) {
+                return "cards/back1.GIF";
+            }
+            str += c.rank() + c.suit();
+            if (isSelected) {
+                str += "S";
+            }
+            str += ".GIF";
+            return str;
+        }
+        private String imageFileName(Card c){
+            return imageFileName(c, false);
+        }
+        protected Ratscrew getGame(){ return game;}
+        protected JLabel getPreviousCard(int index){
+            if (previousCards.length > index && !(index<0)) return previousCards[index];
+            return null;
+        }
+        protected JLabel getPlayerCards(int index){
+            if (playerCards.length > index && !(index<0)) return playerCards[index];
+            return null;
+        }
+        protected JLabel getPlayerData(int index){
+            if (playerData.length > index && !(index<0)) return playerData[index];
+            return null;
+        }
+        protected JLabel getWinMsg(){ return winMsg;}
+        protected JLabel getStatusMsg(){return statusMsg;}
+        protected int pileSize(){return previousCards.length;}
+        protected int players(){return playerCards.length;}
+    }
+    public Ratscrew getGame(){return game;}
 }
