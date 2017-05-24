@@ -1,4 +1,6 @@
-
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.Graphics;
 /**
  * Write a description of class FourPlayerGUI here.
  * 
@@ -15,28 +17,29 @@ public class FourPlayerGUI extends RatscrewGUI implements KeyListener
      */
     public FourPlayerGUI()
     {
-        // initialise instance variables
-        x = 0;
+        super(4);
+        panel = new FourPlayerPanel(this);
+        initDisplay();
+        panel.addKeyListener(this);
+        repaint();
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        playerCards[0].setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - CARD_HEIGHT - 20, CARD_WIDTH, CARD_HEIGHT);
-            playerData[0].setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (4*CARD_HEIGHT/3) - 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
-            playerCards[1].setBounds(getWidth() - CARD_WIDTH, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
-            playerData[1].setBounds(getWidth() - CARD_WIDTH, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
-            playerCards[2].setBounds(getWidth()/2 - CARD_WIDTH/2, 20 + CARD_HEIGHT / 3, CARD_WIDTH, CARD_HEIGHT);
-            playerData[2].setBounds(getWidth()/2 - CARD_WIDTH/2, 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
-            playerCards[3].setBounds(20, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
-            playerData[3].setBounds(20, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+    private class FourPlayerPanel extends CardPanel{
+        public FourPlayerPanel(RatscrewGUI frame){
+            super(frame);
+        }
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            getPlayerCards(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - CARD_HEIGHT - 20, CARD_WIDTH, CARD_HEIGHT);
+            getPlayerData(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (4*CARD_HEIGHT/3) - 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+            getPlayerCards(1).setBounds(getWidth() - CARD_WIDTH, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
+            getPlayerData(1).setBounds(getWidth() - CARD_WIDTH, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+            getPlayerCards(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20 + CARD_HEIGHT / 3, CARD_WIDTH, CARD_HEIGHT);
+            getPlayerData(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+            getPlayerCards(3).setBounds(20, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
+            getPlayerData(3).setBounds(20, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+        }
     }
-    private void keyPressed(KeyEvent e){
+    public void keyPressed(KeyEvent e){
         char key = e.getKeyChar();
         if (key=='r'){
             game.newGame();
@@ -73,8 +76,8 @@ public class FourPlayerGUI extends RatscrewGUI implements KeyListener
                 return;
             }
     }
-    private void keyTyped(KeyEvent e){
+    public void keyTyped(KeyEvent e){
     }
-    private void keyReleased(KeyEvent e){
+    public void keyReleased(KeyEvent e){
     }
 }

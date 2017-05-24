@@ -1,4 +1,4 @@
-
+import java.awt.event.KeyEvent;
 /**
  * Write a description of class RatscrewSim here.
  * 
@@ -11,8 +11,9 @@ public class RatscrewSim
     public static void main(String[] args){
         boolean currentlyPlaying = true;
         boolean playing = true;
-        RatscrewGUI gui = new RatscrewGUI(4);
+        FourPlayerGUI gui = new FourPlayerGUI();
         Ratscrew game = gui.getGame();
+        gui.getPanel().removeKeyListener(gui);
         gui.displayGame();
         while (playing){
             while (!game.gameOver()){
@@ -44,4 +45,5 @@ public class RatscrewSim
             }
         }
     }
+    public void keyPressed(KeyEvent e){return;}
 }

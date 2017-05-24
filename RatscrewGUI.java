@@ -62,7 +62,6 @@ public abstract class RatscrewGUI extends JFrame
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         getContentPane().add(panel);
-        //panel.addKeyListener(this);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         //getRootPane().setDefaultButton(replaceButton);
@@ -101,14 +100,17 @@ public abstract class RatscrewGUI extends JFrame
     }    
     protected void draw(int player){
         if (!game.draw(player)){
-           panel.getStatusMsg().setText((game.getCurrentPlayer() + 1) + " draws");
-           panel.getStatusMsg().setVisible(true);
-        }
-        else panel.getStatusMsg().setVisible(false);
+           if (game.claimable()){
+               panel.getStatusMsg().setText("P" + (game.getFaceCardPlayer() + 1) + " claims");
+           } else {
+               panel.getStatusMsg().setText("P" + (game.getCurrentPlayer() + 1) + " draws");
+           }
+           panel.getStatusMsg().setVisible(true);  
+        } else panel.getStatusMsg().setVisible(false);
     }
     protected void claim(int player){
         if (!game.claim(player)){
-            if (game.claimable()) panel.getStatusMsg().setText((game.getFaceCardPlayer() + 1) + " claims");
+            if (game.claimable()) panel.getStatusMsg().setText("P" + (game.getFaceCardPlayer() + 1) + " claims");
             else panel.getStatusMsg().setText("illegal");
             panel.getStatusMsg().setVisible(true);
         }
@@ -222,4 +224,6 @@ public abstract class RatscrewGUI extends JFrame
         protected int players(){return playerCards.length;}
     }
     public Ratscrew getGame(){return game;}
+    public CardPanel getPanel(){return panel;}
+    public void nothing(){return;}
 }
