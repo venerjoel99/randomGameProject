@@ -114,15 +114,19 @@ public class Ratscrew
     }
     
     public int gameWinner(){
-        if (faceCardPlayer==-1) return -1;
+        int winner = -1;
         for (int i = 0; i < players; i++){
             int cards = 0;
             for (int j=0; j< players; j++){
                  if (i!=j) cards+=playerPiles.get(j).size();
             }
-            if (cards==0) return i+1;
+            if (cards==0){     
+                winner = i;
+            }
         }
-        return -1;       
+        if (cardPile.size() > 0 && 
+        cardPile.get(cardPile.size()-1).pointValue()>0 && faceCardPlayer!=winner) return -1;
+        return winner;       
     }
     
     public boolean draw(int currentDrawer){    
