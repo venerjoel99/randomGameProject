@@ -16,16 +16,25 @@ public class RatscrewOnePlayer
         
         while (playing){
             while (!game.gameOver()){                
-                if (game.claimable() || game.pair() || game.sandwich()){
+                if (game.claimable() || game.pair() || game.sandwich()){                    
                     sleep(waitTime/2);
                     autoClaim(game, gui);
+                    //System.out.println("AutoClaim");
                 }
                 else if (game.getCurrentPlayer()!=0) {
                     sleep(waitTime/2);
                     game.draw(game.getCurrentPlayer());  
                     gui.repaint();
+                    //System.out.println("AutoDraw");
                 }
-                else if (game.deckSize(0)==0) game.draw(0);
+                else if (game.getCurrentPlayer()==0 && game.deckSize(0)==0) {
+                    //System.out.println("No cards left");
+                    game.switchTurn();
+                    gui.repaint();
+                }
+                else {
+                    sleep(waitTime/2);
+                }
                 sleep(waitTime/2);
             }
         }

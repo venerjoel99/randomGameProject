@@ -55,6 +55,7 @@ public class OnePlayerGUI extends RatscrewGUI implements MouseListener
             else {
                 if (game.gameOver()) game.newGame();
             }
+            repaint();
         }
     }
     private class OnePlayerPanel extends CardPanel{

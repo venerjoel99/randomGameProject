@@ -114,6 +114,7 @@ public class Ratscrew
     }
     
     public int gameWinner(){
+        if (faceCardPlayer==-1) return -1;
         for (int i = 0; i < players; i++){
             int cards = 0;
             for (int j=0; j< players; j++){
