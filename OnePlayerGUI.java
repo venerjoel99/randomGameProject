@@ -22,6 +22,7 @@ public class OnePlayerGUI extends RatscrewGUI implements MouseListener
             panel.getPreviousCard(i).addMouseListener(this);
         }
         panel.getPlayerCards(0).addMouseListener(this);
+        panel.getWinMsg().addMouseListener(this);
         repaint();
     }
     public void displayGame(){
@@ -44,6 +45,10 @@ public class OnePlayerGUI extends RatscrewGUI implements MouseListener
             draw(0);      
             repaint();
         }
+        else if (e.getSource().equals(panel.getWinMsg())){
+            if (getGame().gameOver()) getGame().newGame();
+		 	panel.getWinMsg().setVisible(false);
+        }
         else {
             boolean pileClicked = false;
             for (int i = 0; i < panel.pileSize(); i++){
@@ -51,9 +56,6 @@ public class OnePlayerGUI extends RatscrewGUI implements MouseListener
             }
             if (pileClicked){
                 claim(0);
-            }
-            else {
-                if (game.gameOver()) game.newGame();
             }
             repaint();
         }
