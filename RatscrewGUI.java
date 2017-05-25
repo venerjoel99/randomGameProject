@@ -111,7 +111,7 @@ public abstract class RatscrewGUI extends JFrame
     protected void claim(int player){
         if (!game.claim(player)){
             if (game.claimable()) panel.getStatusMsg().setText("P" + (game.getFaceCardPlayer() + 1) + " claims");
-            else panel.getStatusMsg().setText("illegal");
+            else panel.getStatusMsg().setText("False Claim by P" + (player+1));
             panel.getStatusMsg().setVisible(true);
         }
         else panel.getStatusMsg().setVisible(false);

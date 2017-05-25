@@ -55,7 +55,7 @@ public class OnePlayerGUI extends RatscrewGUI implements MouseListener
                 if(e.getSource().equals(panel.getPreviousCard(i)))  pileClicked = true;
             }
             if (pileClicked){
-                claim(0);
+                if (getGame().deckSize(0)>0)claim(0);
             }
             repaint();
         }

@@ -41,7 +41,7 @@ public class RatscrewOnePlayer
         //sleep(waitTime/2);
         if (game.claimable() && game.getFaceCardPlayer()!=0){
             //sleep(waitTime);
-            game.claim(game.getFaceCardPlayer());
+            gui.claim(game.getFaceCardPlayer());
             gui.repaint();
         }  
         else if (game.pair() || game.sandwich()){
@@ -49,7 +49,7 @@ public class RatscrewOnePlayer
             do{
                 claimer = (int) (Math.random()*game.getPlayers());
             }while (claimer==0 || game.getPlayerPile(claimer).size()==0);
-            game.claim(claimer);                                 
+            gui.claim(claimer);                                 
             gui.repaint();
         }
     }
