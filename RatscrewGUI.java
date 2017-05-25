@@ -25,8 +25,8 @@ import java.awt.event.ActionEvent;
  */
 public abstract class RatscrewGUI extends JFrame
 {
-    protected static final int DEFAULT_HEIGHT = 500;
-    protected static final int DEFAULT_WIDTH = 800;
+    protected static final int DEFAULT_HEIGHT = 500 * 3;
+    protected static final int DEFAULT_WIDTH = 800 * 3;
     protected static final int CARD_WIDTH = 73;
     protected static final int CARD_HEIGHT = 97;    
 
@@ -167,7 +167,7 @@ public abstract class RatscrewGUI extends JFrame
             for (int i = 0; i < playerCards.length; i++){
                 playerCards[i] = new JLabel();
                 playerData[i] = new JLabel();
-                playerData[i].setFont(new Font("SansSerif", Font.BOLD, 10));
+                playerData[i].setFont(new Font("SansSerif", Font.BOLD, 20));
                 this.add(playerCards[i]);
                 this.add(playerData[i]);
             }
@@ -175,8 +175,8 @@ public abstract class RatscrewGUI extends JFrame
             winMsg = new JLabel();
             this.add(statusMsg);
             statusMsg.setVisible(false);
-            winMsg.setFont(new Font("SansSerif", Font.BOLD, 10));
-            winMsg.setForeground(Color.GREEN);
+            winMsg.setFont(new Font("SansSerif", Font.BOLD, 20));
+            winMsg.setForeground(Color.BLACK);
             this.add(winMsg);
             winMsg.setVisible(false);
         }
