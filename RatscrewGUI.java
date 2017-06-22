@@ -42,19 +42,14 @@ public abstract class RatscrewGUI extends JFrame
      */
     public RatscrewGUI(int players) {
         game = new Ratscrew(players);
-        //initDisplay();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //repaint();
     }
     /**
      * Initialize the display.
      */
     protected void initDisplay()  {
-        //panel = new CardPanel(this);
-
         this.setTitle("Egyptian Ratscrew");
-        this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-        
+        this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));        
         panel.setLayout(new GridLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
@@ -64,10 +59,7 @@ public abstract class RatscrewGUI extends JFrame
         getContentPane().add(panel);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
-        //getRootPane().setDefaultButton(replaceButton);
         panel.setVisible(true);
-        //win = panel.getWinMsg();
-        //status = panel.getStatus();
     }    
     /**
      * Draw the display (cards and messages).
@@ -97,7 +89,11 @@ public abstract class RatscrewGUI extends JFrame
                 setVisible(true);
             }
         });
-    }    
+    }
+    /**
+     * Attempt to put down a card of a player
+     * @param player the index of the player who is attempting to draw
+     */
     protected void draw(int player){
         if (!game.draw(player)){
            if (game.claimable()){
@@ -108,6 +104,10 @@ public abstract class RatscrewGUI extends JFrame
            panel.getStatusMsg().setVisible(true);  
         } else panel.getStatusMsg().setVisible(false);
     }
+    /**
+     * Attempt to give all center pile cards to a player
+     * @param player the index of the player attempting a claim
+     */
     protected void claim(int player){
         if (!game.claim(player)){
             if (game.claimable()) panel.getStatusMsg().setText("P" + (game.getFaceCardPlayer() + 1) + " claims");
@@ -116,6 +116,9 @@ public abstract class RatscrewGUI extends JFrame
         }
         else panel.getStatusMsg().setVisible(false);
     }
+    /**
+     * An abstract panel class for the abstract GUI class
+     */
     protected abstract class CardPanel extends JPanel{
         private Ratscrew game;
         private JLabel[] previousCards;
@@ -123,9 +126,16 @@ public abstract class RatscrewGUI extends JFrame
         private JLabel[] playerData;
         private JLabel statusMsg;
         private JLabel winMsg;
+        /**
+         * Constructor for the card panel class
+         */
         protected CardPanel(RatscrewGUI frame){
             this.game = frame.game;
         }
+        /**
+         * Draws all player cards and data labels and 
+         * the labels to display the last 3 cards of the center pile
+         */
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             previousCards[0].setBounds(getWidth()/2 + (CARD_WIDTH/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
@@ -156,6 +166,9 @@ public abstract class RatscrewGUI extends JFrame
             statusMsg.setBounds(getWidth()/2, getHeight()/2 - CARD_HEIGHT/2 - 30, 100, 30);
             winMsg.setBounds(getWidth()/2, getHeight()/2 + CARD_HEIGHT/2 + 30, 100, 30);
         }
+        /**
+         * Initializes the panel components
+         */
         protected void initPanel(){
             previousCards = new JLabel[3];
             playerCards = new JLabel[game.getPlayers()];
@@ -202,28 +215,63 @@ public abstract class RatscrewGUI extends JFrame
             str += ".GIF";
             return str;
         }
+        /**
+         * Returns the image file name corresponding to the card,
+         */
         private String imageFileName(Card c){
             return imageFileName(c, false);
         }
-        protected Ratscrew getGame(){ return game;}
+        /**
+         * Getter for the game object
+         */
+        protected Ratscrew getGame(){ 
+            return game;
+        }
+        /**
+         * Getter for a previous card on the center
+         */
         protected JLabel getPreviousCard(int index){
             if (previousCards.length > index && !(index<0)) return previousCards[index];
             return null;
         }
+        /**
+         * Getter for the deck of a specific player
+         * @param player the player whose card label is to be returned
+         */
         protected JLabel getPlayerCards(int index){
             if (playerCards.length > index && !(index<0)) return playerCards[index];
             return null;
         }
+        /**
+         * Getter for the data label of a specific player
+         */
         protected JLabel getPlayerData(int index){
             if (playerData.length > index && !(index<0)) return playerData[index];
             return null;
         }
+        /**
+         * Getter for the win message label
+         */
         protected JLabel getWinMsg(){ return winMsg;}
+        /**
+         * Getter for the status message label
+         */
         protected JLabel getStatusMsg(){return statusMsg;}
+        /**
+         * Return the number of cards on the center
+         */
         protected int pileSize(){return previousCards.length;}
+        /**
+         * Return the number of players playing the game
+         */
         protected int players(){return playerCards.length;}
     }
+    /**
+     * Getter for the gui's game member object
+     */
     public Ratscrew getGame(){return game;}
+    /**
+     * Return the panel member of the gui
+     */
     public CardPanel getPanel(){return panel;}
-    public void nothing(){return;}
 }
