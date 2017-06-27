@@ -58,8 +58,7 @@ public abstract class RatscrewGUI extends JFrame
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         panel.setVisible(true);
-    }   
-    
+    }       
     /**
      * Draw the display (cards and messages).
      */

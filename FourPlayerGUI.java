@@ -23,20 +23,20 @@ public class FourPlayerGUI extends RatscrewGUI implements KeyListener
         panel.addKeyListener(this);
         repaint();
     }
+    public void repaint(){
+        super.repaint();
+        panel.getPlayerCards(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (3*CARD_HEIGHT/2) - 40, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (14*CARD_HEIGHT/6) - 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+        panel.getPlayerCards(1).setBounds(getWidth() - (3*CARD_WIDTH/2), getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(1).setBounds(getWidth() - CARD_WIDTH*2, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+        panel.getPlayerCards(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20 + CARD_HEIGHT / 3, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+        panel.getPlayerCards(3).setBounds(20, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(3).setBounds(20, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+    }
     private class FourPlayerPanel extends CardPanel{
         public FourPlayerPanel(RatscrewGUI frame){
             super(frame);
-        }
-        public void paintComponent(Graphics g){
-            super.paintComponent(g);
-            getPlayerCards(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - CARD_HEIGHT - 20, CARD_WIDTH, CARD_HEIGHT);
-            getPlayerData(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (4*CARD_HEIGHT/3) - 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
-            getPlayerCards(1).setBounds(getWidth() - CARD_WIDTH, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
-            getPlayerData(1).setBounds(getWidth() - CARD_WIDTH*2, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
-            getPlayerCards(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20 + CARD_HEIGHT / 3, CARD_WIDTH, CARD_HEIGHT);
-            getPlayerData(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
-            getPlayerCards(3).setBounds(20, getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
-            getPlayerData(3).setBounds(20, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
         }
     }
     public void keyPressed(KeyEvent e){
@@ -74,7 +74,8 @@ public class FourPlayerGUI extends RatscrewGUI implements KeyListener
             default:
                 signalError();
                 return;
-            }
+        }
+        repaint();
     }
     public void keyTyped(KeyEvent e){
     }

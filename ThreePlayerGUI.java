@@ -20,6 +20,15 @@ public class ThreePlayerGUI extends RatscrewGUI implements KeyListener
         panel.addKeyListener(this);
         repaint();
     }
+    public void repaint(){
+        super.repaint();
+        panel.getPlayerCards(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (3*CARD_HEIGHT/2) - 40, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(0).setBounds(getWidth()/2 - CARD_WIDTH/2, getHeight() - (14*CARD_HEIGHT/6) - 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+        panel.getPlayerCards(1).setBounds(getWidth() - (3*CARD_WIDTH/2), getHeight()/2 - CARD_HEIGHT/2, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(1).setBounds(getWidth() - CARD_WIDTH*2, getHeight()/2 - (3*CARD_HEIGHT/4), CARD_WIDTH*2, CARD_HEIGHT/3);
+        panel.getPlayerCards(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20 + CARD_HEIGHT / 3, CARD_WIDTH, CARD_HEIGHT);
+        panel.getPlayerData(2).setBounds(getWidth()/2 - CARD_WIDTH/2, 20, CARD_WIDTH * 2, CARD_HEIGHT/3);
+    }
     public void keyPressed(KeyEvent e){
         char key = e.getKeyChar();
         if (key=='r'){
@@ -55,7 +64,8 @@ public class ThreePlayerGUI extends RatscrewGUI implements KeyListener
             default:
                 signalError();
                 return;
-            }
+        }
+        repaint();
     }
     public void keyTyped(KeyEvent e){
     }
