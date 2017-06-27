@@ -50,17 +50,16 @@ public abstract class RatscrewGUI extends JFrame
     protected void initDisplay()  {
         this.setTitle("Egyptian Ratscrew");
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));        
-        panel.setLayout(new GridLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        panel.setLayout(null);
         panel.setPreferredSize(
             new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         panel.initPanel();
-        panel.setPreferredSize(
-            new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
         getContentPane().add(panel);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         panel.setVisible(true);
-    }    
+    }   
+    
     /**
      * Draw the display (cards and messages).
      */
@@ -69,8 +68,12 @@ public abstract class RatscrewGUI extends JFrame
             panel.getWinMsg().setText("Player " + game.gameWinner() + " wins");
             panel.getWinMsg().setVisible(true);
         }
-        panel.setPreferredSize(
-            new Dimension(DEFAULT_WIDTH - 20, DEFAULT_HEIGHT - 20));
+        for (int i = 0; i < panel.previousCards.length; i++){
+            panel.previousCards[i].setBounds(getWidth()/2 + (CARD_WIDTH/2) - (CARD_WIDTH*i/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
+        }
+        panel.statusMsg.setBounds(getWidth()/2, getHeight()/2 - CARD_HEIGHT/2 - 30, 100, 30);
+        panel.winMsg.setBounds(getWidth()/2, getHeight()/2 + CARD_HEIGHT/2 + 30, 100, 30);
+        panel.refresh();
         panel.repaint();
     }    
     /**
@@ -138,33 +141,7 @@ public abstract class RatscrewGUI extends JFrame
          */
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            previousCards[0].setBounds(getWidth()/2 + (CARD_WIDTH/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
-            previousCards[1].setBounds(getWidth()/2, getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
-            previousCards[2].setBounds(getWidth()/2 - (CARD_WIDTH/2),  getHeight()/2 - (CARD_HEIGHT/2), CARD_WIDTH, CARD_HEIGHT);
-            for (int i = 0; i < previousCards.length; i++){
-                String cardImageFileName;
-                if (game.getCardPile().size()>i){
-                    cardImageFileName = imageFileName(game.getCardPile().get(game.getCardPile().size()-(1+i)));
-                }
-                else cardImageFileName = imageFileName(null);
-                URL imageURL = getClass().getResource(cardImageFileName);
-                if (imageURL !=null){
-                    ImageIcon icon = new ImageIcon(imageURL);
-                    previousCards[i].setIcon(icon);
-                    previousCards[i].setVisible(cardImageFileName!=imageFileName(null));
-                }else {
-                    throw new RuntimeException(
-                        "Card image not found: \"" + cardImageFileName + "\"");
-                    }
-            }
-            for (int i = 0; i < playerCards.length; i++){
-                playerData[i].setText("P" + (i+1) + ": " + game.deckSize(i) + " cards");
-                playerCards[i].setIcon(new ImageIcon(getClass().getResource(imageFileName(null))));
-                playerData[i].setVisible(true);
-                playerCards[i].setVisible(game.deckSize(i)>0 && game.getCurrentPlayer()==i);
-            }
-            statusMsg.setBounds(getWidth()/2, getHeight()/2 - CARD_HEIGHT/2 - 30, 100, 30);
-            winMsg.setBounds(getWidth()/2, getHeight()/2 + CARD_HEIGHT/2 + 30, 100, 30);
+            
         }
         /**
          * Initializes the panel components
@@ -192,6 +169,30 @@ public abstract class RatscrewGUI extends JFrame
             winMsg.setForeground(Color.BLACK);
             this.add(winMsg);
             winMsg.setVisible(false);
+        }
+        public void refresh(){
+            for (int i = 0; i < previousCards.length; i++){
+                String cardImageFileName;
+                if (game.getCardPile().size()>i){
+                    cardImageFileName = imageFileName(game.getCardPile().get(game.getCardPile().size()-(1+i)));
+                }
+                else cardImageFileName = imageFileName(null);
+                URL imageURL = getClass().getResource(cardImageFileName);
+                if (imageURL !=null){
+                    ImageIcon icon = new ImageIcon(imageURL);
+                    previousCards[i].setIcon(icon);
+                    previousCards[i].setVisible(cardImageFileName!=imageFileName(null));
+                }else {
+                    throw new RuntimeException(
+                        "Card image not found: \"" + cardImageFileName + "\"");
+                    }
+            }
+            for (int i = 0; i < playerCards.length; i++){
+                playerData[i].setText("P" + (i+1) + ": " + game.deckSize(i) + " cards");
+                playerCards[i].setIcon(new ImageIcon(getClass().getResource(imageFileName(null))));
+                playerData[i].setVisible(true);
+                playerCards[i].setVisible(game.deckSize(i)>0 && game.getCurrentPlayer()==i);
+            }
         }
         /**
            * Returns the image that corresponds to the input card.
